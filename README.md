@@ -342,6 +342,74 @@ asyncio.run(main())
 ```
 
 
+## Video-to-Video (Genjutsu)
+
+[Genjutsu](https://docs.higgsfield.ai/docs/models/genjutsu) is Higgsfield's video-to-video model family. Each endpoint takes a `video_url` (source of at least 4 seconds; clips longer than 30 seconds are trimmed) and returns a single `result['video']['url']`.
+
+| Workflow | Endpoint | Required arguments |
+| - | - | - |
+| Restyle | `higgsfield/genjutsu/restyle/v1.0` | `video_url`, `preset_id` |
+| Motion transfer | `higgsfield/genjutsu/motion-transfer/v1.0` | `video_url`, `image_urls` (1–8) |
+| Object swap | `higgsfield/genjutsu/object-swap/v1.0` | `video_url`, `image_urls` (1–8) |
+
+Optional arguments on all three: `prompt` (default `''`) and `resolution` (`'480p'`, `'720p'` (default) or `'1080p'`). Restyle also accepts up to 5 character references in `image_urls`.
+
+### Restyle
+
+`preset_id` is a style UUID from `GET https://api.higgsfield.ai/models/higgsfield/genjutsu/restyle/v1.0/presets` (same `Authorization: Key ...` header). The ID below is the "Cel-Shaded CG Anime" preset; fetch the catalog for the current list.
+
+```python
+import higgsfield_client
+
+result = higgsfield_client.subscribe(
+    'higgsfield/genjutsu/restyle/v1.0',
+    arguments={
+        'video_url': 'https://example.com/input.mp4',
+        'preset_id': 'c2143317-f28d-4c3c-a0b8-39bd547e08a7',
+        'image_urls': [],  # optional character references, max 5
+        'prompt': 'Preserve the original movement and camera composition.',
+        'resolution': '720p',
+    },
+)
+
+print(result['video']['url'])
+```
+
+### Motion transfer
+
+```python
+import higgsfield_client
+
+result = higgsfield_client.subscribe(
+    'higgsfield/genjutsu/motion-transfer/v1.0',
+    arguments={
+        'video_url': 'https://example.com/dance.mp4',
+        'image_urls': ['https://example.com/character.png'],  # 1–8 references
+    },
+)
+
+print(result['video']['url'])
+```
+
+### Object swap
+
+```python
+import higgsfield_client
+
+result = higgsfield_client.subscribe(
+    'higgsfield/genjutsu/object-swap/v1.0',
+    arguments={
+        'video_url': 'https://example.com/input.mp4',
+        'image_urls': ['https://example.com/new-object.png'],  # 1–8 references
+        'prompt': 'Swap the handbag for the referenced one.',
+    },
+)
+
+print(result['video']['url'])
+```
+
+All three work with `subscribe_async`, `submit`/`submit_async` (with `webhook_url`) and the request controller exactly like the examples above. See `examples/genjutsu.py` for a runnable script.
+
 ## File Uploads
 
 Upload files to use in your requests:
