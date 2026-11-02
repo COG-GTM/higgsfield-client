@@ -119,6 +119,64 @@ async def main():
 asyncio.run(main())
 ```
 
+### Video-to-Video: Genjutsu
+
+Genjutsu edits a source video (at least 4 s; anything over 30 s is trimmed to the first 30 s) and returns one video at `result['video']['url']`. It has three endpoints:
+
+| Endpoint | What it does | Required arguments |
+|---|---|---|
+| `higgsfield/genjutsu/restyle/v1.0` | Changes the visual style, keeps motion, composition and source audio | `video_url`, `preset_id` |
+| `higgsfield/genjutsu/motion-transfer/v1.0` | Transfers the source video's motion onto 1-8 ordered image references | `video_url`, `image_urls` |
+| `higgsfield/genjutsu/object-swap/v1.0` | Replaces objects using 1-8 image references; source needs at least 409,600 px per frame (e.g. 1280x720) | `video_url`, `image_urls` |
+
+All three take an optional `prompt` (default `''`, max 10,000 chars) and `resolution` (`'480p'`, `'720p'` default, or `'1080p'`). Pass `[]` / `''` instead of `None`; the API rejects `null`.
+
+**Restyle:**
+
+```python
+import higgsfield_client
+
+result = higgsfield_client.subscribe(
+    'higgsfield/genjutsu/restyle/v1.0',
+    arguments={
+        'video_url': 'https://example.com/source.mp4',
+        'preset_id': 'c2143317-f28d-4c3c-a0b8-39bd547e08a7',  # Cel-Shaded CG Anime
+        'image_urls': [],  # optional, up to 5 character references
+        'prompt': 'Preserve the original movement and camera composition.',
+        'resolution': '480p',
+    },
+)
+
+print(result['video']['url'])
+```
+
+`preset_id` takes the preset UUID, not its name. List the available presets (`{model, items: [{id, name, preview_url}]}`) with the same credentials:
+
+```bash
+curl -H "Authorization: Key $HF_KEY" \
+  https://api.higgsfield.ai/models/higgsfield/genjutsu/restyle/v1.0/presets
+```
+
+**Motion transfer / object swap:**
+
+```python
+import higgsfield_client
+
+result = higgsfield_client.subscribe(
+    'higgsfield/genjutsu/motion-transfer/v1.0',  # or 'higgsfield/genjutsu/object-swap/v1.0'
+    arguments={
+        'video_url': 'https://example.com/dance.mp4',
+        'image_urls': ['https://example.com/character.png'],
+        'prompt': '',
+        'resolution': '720p',
+    },
+)
+
+print(result['video']['url'])
+```
+
+Genjutsu requests can take several minutes to tens of minutes (queue time plus generation); `subscribe` keeps polling until the request reaches a terminal status, with no client-side poll timeout.
+
 ### Pattern 2: Submit and Track Progress
 
 Submit a request and monitor its status in real-time:
