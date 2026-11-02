@@ -1,0 +1,9 @@
+# higgsfield-client examples/genjutsu.py, Python 3.12.16, started 2026-11-02T00:45:49Z
+[2026-11-02T00:45:49+00:00] preset: Cel-Shaded CG Anime (c2143317-f28d-4c3c-a0b8-39bd547e08a7)
+[2026-11-02T00:45:50+00:00] request_id: 01a199b8-3a4d-77a3-a3f2-f05bb728a7a1
+[2026-11-02T00:45:50+00:00] status: Queued
+[2026-11-02T00:45:55+00:00] status: InProgress
+[2026-11-02T00:52:55+00:00] status: Completed
+[2026-11-02T00:52:56+00:00] status: completed after 426s
+https://d3u0tzju9qaucj.cloudfront.net/a4086dbb-d386-4bab-8efd-636d1f91e38e/01a199b8-3a4d-77a3-a3f2-f05bb728a7a1/1f9ef1a4-77e0-4245-ba17-275d6217d911.mp4
+exit=0 finished 2026-11-02T00:52:56Z
