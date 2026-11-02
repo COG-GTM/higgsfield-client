@@ -342,6 +342,29 @@ asyncio.run(main())
 ```
 
 
+## Genjutsu Video-to-Video
+
+[Genjutsu](https://docs.higgsfield.ai/docs/models/genjutsu) transforms a 4–30 second source video through three endpoints, all of which take an optional `prompt` and `resolution` (`480p`, `720p` default, or `1080p`):
+
+| Endpoint | Required arguments |
+| --- | --- |
+| `higgsfield/genjutsu/motion-transfer/v1.0` | `video_url`, `image_urls` (1–8) |
+| `higgsfield/genjutsu/object-swap/v1.0` | `video_url`, `image_urls` (1–8) |
+| `higgsfield/genjutsu/restyle/v1.0` | `video_url`, `preset_id` (optional `image_urls`, up to 5) |
+
+```python
+result = higgsfield_client.subscribe(
+    'higgsfield/genjutsu/motion-transfer/v1.0',
+    arguments={
+        'video_url': 'https://example.com/source.mp4',
+        'image_urls': ['https://example.com/character.png'],
+        'resolution': '720p'
+    }
+)
+```
+
+Restyle's `preset_id` must be an `items[].id` from `GET https://api.higgsfield.ai/models/higgsfield/genjutsu/restyle/v1.0/presets`; fetch the current catalog rather than hard-coding names or example UUIDs. See [`examples/genjutsu.py`](examples/genjutsu.py) for all three workflows.
+
 ## File Uploads
 
 Upload files to use in your requests:
