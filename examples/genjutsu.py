@@ -4,11 +4,10 @@ Docs: https://docs.higgsfield.ai/docs/models/genjutsu
 Source videos must be 4+ seconds; anything past 30 seconds is trimmed.
 """
 
-import os
-
 import httpx
 
 import higgsfield_client
+from higgsfield_client.auth import get_credential_key
 
 SOURCE_VIDEO = "https://example.com/source.mp4"
 
@@ -40,9 +39,7 @@ print(swap)
 presets = (
     httpx.get(
         "https://api.higgsfield.ai/models/higgsfield/genjutsu/restyle/v1.0/presets",
-        headers={
-            "Authorization": f"Key {os.environ['HF_API_KEY']}:{os.environ['HF_API_SECRET']}"
-        },
+        headers={"Authorization": f"Key {get_credential_key()}"},
     )
     .raise_for_status()
     .json()
