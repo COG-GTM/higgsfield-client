@@ -1,0 +1,6 @@
+2026-11-02T19:08:41+00:00 start higgsfield_client.subscribe higgsfield/genjutsu/restyle/v1.0 (480p, Cel-Shaded CG Anime)
+2026-11-02T19:08:42+00:00 enqueued request_id=01a19da9-f0ba-7df0-8c66-cf8650647f49
+2026-11-02T19:08:42+00:00 status=Queued
+2026-11-02T19:08:50+00:00 status=InProgress
+2026-11-02T19:24:12+00:00 status=Completed
+2026-11-02T19:24:12+00:00 completed status=completed request_id=01a19da9-f0ba-7df0-8c66-cf8650647f49 video_url=https://d3u0tzju9qaucj.cloudfront.net/a4086dbb-d386-4bab-8efd-636d1f91e38e/01a19da9-f0ba-7df0-8c66-cf8650647f49/14d0c025-c7bd-4439-92fa-dc87cf2fe397.mp4
