@@ -342,6 +342,61 @@ asyncio.run(main())
 ```
 
 
+## Video-to-Video: Genjutsu
+
+[Genjutsu](https://docs.higgsfield.ai/docs/models/genjutsu) can restyle a source video, transfer its motion to new characters, or swap objects in it. Every variant takes a `video_url` (at least 4 s; longer than 30 s is trimmed) and returns `result['video']['url']`. Jobs usually take several minutes.
+
+| Endpoint | Required | Optional |
+|---|---|---|
+| `higgsfield/genjutsu/restyle/v1.0` | `video_url`, `preset_id` | `image_urls` (0-5, default `[]`, never `None`), `prompt`, `resolution` |
+| `higgsfield/genjutsu/motion-transfer/v1.0` | `video_url`, `image_urls` (1-8) | `prompt`, `resolution` |
+| `higgsfield/genjutsu/object-swap/v1.0` | `video_url` (at least 409,600 px per frame, e.g. 1280x720), `image_urls` (1-8) | `prompt`, `resolution` |
+
+`resolution` is `480p`, `720p` (default) or `1080p`.
+
+**Restyle** needs a style preset id. Presets can change, so fetch them from the presets endpoint:
+
+```python
+import httpx
+
+import higgsfield_client
+from higgsfield_client.auth import get_credential_key
+
+presets = httpx.get(
+    'https://api.higgsfield.ai/models/higgsfield/genjutsu/restyle/v1.0/presets',
+    headers={'Authorization': f'Key {get_credential_key()}'},
+).json()['items']  # [{'id': ..., 'name': 'Cel-Shaded CG Anime', 'preview_url': ...}, ...]
+preset = next(p for p in presets if p['name'] == 'Cel-Shaded CG Anime')
+
+result = higgsfield_client.subscribe(
+    'higgsfield/genjutsu/restyle/v1.0',
+    arguments={
+        'video_url': 'https://example.com/source.mp4',
+        'preset_id': preset['id'],
+        'image_urls': [],
+        'prompt': 'Preserve the original movement and camera composition.',
+        'resolution': '480p',
+    },
+)
+
+print(result['video']['url'])
+```
+
+**Motion transfer / object swap** take reference images instead of a preset:
+
+```python
+result = higgsfield_client.subscribe(
+    'higgsfield/genjutsu/motion-transfer/v1.0',  # or 'higgsfield/genjutsu/object-swap/v1.0'
+    arguments={
+        'video_url': 'https://example.com/source.mp4',
+        'image_urls': [higgsfield_client.upload_file('character.png')],
+        'prompt': 'Keep the camera locked off.',
+    },
+)
+```
+
+The API only fetches files it can access, so upload local files first (see [File Uploads](#file-uploads)). [`examples/genjutsu.py`](examples/genjutsu.py) is a runnable Restyle script with `--list-presets`.
+
 ## File Uploads
 
 Upload files to use in your requests:
