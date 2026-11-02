@@ -12,6 +12,7 @@ Usage:
 """
 
 import argparse
+import sys
 import time
 from datetime import datetime, timezone
 
@@ -85,6 +86,8 @@ def main():
     )
 
     log(f"status: {result['status']} after {time.monotonic() - started:.0f}s")
+    if result.get('status') != 'completed':
+        sys.exit(f'Genjutsu request did not complete: {result}')
     print(result['video']['url'])
 
 
