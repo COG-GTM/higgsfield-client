@@ -1,0 +1,6 @@
+2026-11-02T21:51:40.672827Z submitting via higgsfield_client.subscribe
+2026-11-02T21:51:41.072329Z request_id 01a19e3f-25a0-7f69-b607-beae3bb30f50
+2026-11-02T21:51:41.260897Z status Queued
+2026-11-02T21:51:49.770033Z status InProgress
+2026-11-02T22:06:28.184133Z status Completed
+2026-11-02T22:06:28.630714Z result {"status": "completed", "request_id": "01a19e3f-25a0-7f69-b607-beae3bb30f50", "status_url": "https://api.higgsfield.ai/requests/01a19e3f-25a0-7f69-b607-beae3bb30f50/status", "cancel_url": "https://api.higgsfield.ai/requests/01a19e3f-25a0-7f69-b607-beae3bb30f50/cancel", "expires_at": "2026-11-09T22:06:27.840309+00:00", "video": {"url": "https://d3u0tzju9qaucj.cloudfront.net/a4086dbb-d386-4bab-8efd-636d1f91e38e/01a19e3f-25a0-7f69-b607-beae3bb30f50/bab7fc2d-b04f-4283-bda2-bfc8f43f1e9a.mp4"}}
