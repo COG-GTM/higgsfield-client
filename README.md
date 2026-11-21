@@ -372,6 +372,12 @@ url = higgsfield_client.upload_file(image_path)
 
 ### Upload PIL Images
 
+Image uploads need [Pillow](https://pypi.org/project/pillow/), which is not installed with the SDK:
+
+```bash
+pip install pillow
+```
+
 ```python
 from PIL import Image
 import higgsfield_client
@@ -385,16 +391,36 @@ url = higgsfield_client.upload_image(image, format='jpeg')
 All upload methods have async versions:
 
 ```python
+import asyncio
+
 import higgsfield_client
 
-# Async raw data upload
-url = await higgsfield_client.upload_async(data, content_type='image/jpeg')
+async def main():
+    with open('path/to/example.jpeg', 'rb') as f:
+        data = f.read()
 
-# Async file upload
-url = await higgsfield_client.upload_file_async('path/to/example.jpeg')
+    # Async raw data upload
+    url = await higgsfield_client.upload_async(data, content_type='image/jpeg')
 
-# Async image upload
-url = await higgsfield_client.upload_image_async(image, format='jpeg')
+    # Async file upload
+    url = await higgsfield_client.upload_file_async('path/to/example.jpeg')
+
+asyncio.run(main())
+```
+
+Async image upload (requires Pillow, see above):
+
+```python
+import asyncio
+
+from PIL import Image
+import higgsfield_client
+
+async def main():
+    image = Image.open('path/to/example.jpeg')
+    url = await higgsfield_client.upload_image_async(image, format='jpeg')
+
+asyncio.run(main())
 ```
 
 ## Agent API
