@@ -393,7 +393,6 @@ All upload methods have async versions:
 ```python
 import asyncio
 
-from PIL import Image
 import higgsfield_client
 
 async def main():
@@ -406,7 +405,18 @@ async def main():
     # Async file upload
     url = await higgsfield_client.upload_file_async('path/to/example.jpeg')
 
-    # Async image upload
+asyncio.run(main())
+```
+
+Async image upload (requires Pillow, see above):
+
+```python
+import asyncio
+
+from PIL import Image
+import higgsfield_client
+
+async def main():
     image = Image.open('path/to/example.jpeg')
     url = await higgsfield_client.upload_image_async(image, format='jpeg')
 
